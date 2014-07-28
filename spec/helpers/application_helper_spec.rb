@@ -14,5 +14,4 @@ describe ApplicationHelper do
 			full_title ('').should_not =~ /\|/
 		end
 	end
-	
 end
