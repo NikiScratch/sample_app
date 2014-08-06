@@ -1,10 +1,22 @@
 class UsersController < ApplicationController
-  def new
-  end
-  def show
-  	#pass ID
-  	@user= User.find(params[:id])
+	
 
-  	#raise params.inspect
-  end
+	def show
+	#pass ID
+		@user= User.find(params[:id])
+	end
+
+	def new
+		@user=User.new
+	end
+
+	def create
+	  @user=User.new(params[:user])
+	  if @user.save
+	  	flash[:success]="Welcone to the Sample App!"
+	  	redirect_to (@user)
+	  else
+	  	render 'new'
+	  end
+	end
 end
