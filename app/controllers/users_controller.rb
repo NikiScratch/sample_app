@@ -10,6 +10,7 @@ class UsersController < ApplicationController
 	def show
 	#pass ID
 		@user= User.find(params[:id])
+		@microposts = @user.microposts.paginate(page: params[:page])
 	end
 
 	def new
@@ -37,17 +38,17 @@ class UsersController < ApplicationController
 	end
 
 	def update
-		@user = User.find(params[:id])
+		#@user = User.find(params[:id])
 		if @user.update_attributes(params[:user])
 			# Handle a successful update.
-			flash[:success]="Profile Updated"
 			sign_in @user
+			flash[:success]="Profile Updated"
 			redirect_to @user
 		else
 			render 'edit'
 		end
 	end
-end	
+
 
 private
 	def signed_in_user
@@ -59,11 +60,12 @@ private
 #making sure user is same as user logged in
 	def correct_user
 		@user=User.find(params[:id])
-		redirect_to root_path unless current_user?(@user)
+		redirect_to root_url unless current_user?(@user)
 	end
 
 	def admin_user
 		redirect_to root_path unless current_user.admin?
 	end
 
+end
 end
