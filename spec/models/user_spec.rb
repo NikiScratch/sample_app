@@ -1,7 +1,6 @@
 require 'spec_helper'
 describe User do
 	before do
-
 		@user = User.new(name: "Example User", email: "user@example.com", 
 		password: "foobar", password_confirmation: "foobar")
 	end
@@ -15,7 +14,7 @@ describe User do
 		it { should respond_to(:remember_token) }
 		it { should respond_to(:authenticate) }
 		it { should respond_to(:microposts) }
-		#it { should respond_to(:feed) }
+		it { should respond_to(:feed) }
 		#once saved will it pass
 		it { should be_valid }
 		it { should_not be_admin }
