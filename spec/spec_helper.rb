@@ -83,8 +83,5 @@ Spork.each_run do
   # This code will be run each time you run your specs.
 
 end
-
 end
-Spork.each_run do
-# This code will be run each time you run your specs.
 end

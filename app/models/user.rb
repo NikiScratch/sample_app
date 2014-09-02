@@ -13,8 +13,7 @@ class User < ActiveRecord::Base
 	has_many :followed_users, through: :relationships, source: :followed
 
 	has_many :reverse_relationships, foreign_key: "followed_id",
-	class_name: "Relationship",
-	dependent: :destroy
+	class_name: "Relationship",	dependent: :destroy
 	has_many :followers, through: :reverse_relationships, source: :follower
 
 
@@ -31,11 +30,6 @@ class User < ActiveRecord::Base
 	def feed
 
 		# This is preliminary. See "Following users" for the full implementation.
-		Micropost.where("user_id = ?", id)
-	end
-
-
-	# This is preliminary. See "Following users" for the full implementation.
 		Micropost.where("user_id = ?", id)
 	end
 

@@ -7,7 +7,3 @@ class Micropost < ActiveRecord::Base
 
   default_scope order: 'microposts.created_at DESC'
 end
-
-  attr_accessible :content, :user_id
-  belongs_to :user
-end
