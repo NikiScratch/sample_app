@@ -13,11 +13,43 @@ describe User do
 		it { should respond_to(:password_confirmation) }
 		it { should respond_to(:remember_token) }
 		it { should respond_to(:authenticate) }
+
+
+		it { should respond_to(:feed) }
+
+		it { should respond_to(:admin) }
 		it { should respond_to(:microposts) }
 		it { should respond_to(:feed) }
+		it { should respond_to(:relationships) }
+		it { should respond_to(:followed_users) }
+		it { should respond_to(:reverse_relationships) }
+		it { should respond_to(:followers) }
+
 		#once saved will it pass
 		it { should be_valid }
 		it { should_not be_admin }
+
+
+		describe "micropost associations" do
+			before { @user.save }
+			let!(:older_micropost) do
+			FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago)
+			end
+			let!(:newer_micropost) do
+			FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago)
+			end
+		
+			describe "status" do
+				let(:unfollowed_post) do
+					FactoryGirl.create(:micropost, user: FactoryGirl.create(:user))
+				end
+					its(:feed) { should include(newer_micropost) }
+					its(:feed) { should include(older_micropost) }
+					its(:feed) { should_not include(unfollowed_post) }
+				end
+		end
+
+
 
 	describe "accessible attributes" do
 		it "should not allow access to admin" do
@@ -109,6 +141,7 @@ describe User do
 			let (:user_for_invalid_password){ found_user.authenticate("invalid")}
 			it {should_not== user_for_invalid_password}
 			specify {user_for_invalid_password.should be_false}
+
 		end
 	end
 
