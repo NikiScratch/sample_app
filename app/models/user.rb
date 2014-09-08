@@ -3,14 +3,10 @@ class User < ActiveRecord::Base
 	has_secure_password
 	before_save { email.downcase! }
 	
-
 	has_many :microposts, dependent: :destroy
 	has_many :relationships, foreign_key: "follower_id", dependent: :destroy
 	has_many :followed_users, through: :relationships, source: :followed
-
-	has_many :reverse_relationships, foreign_key: "followed_id",
-	class_name: "Relationship",
-	dependent: :destroy
+	has_many :reverse_relationships, foreign_key: "followed_id", class_name: "Relationship", dependent: :destroy
 	has_many :followers, through: :reverse_relationships, source: :follower
 	
 
@@ -25,8 +21,8 @@ class User < ActiveRecord::Base
 	validates :password_confirmation, presence: true
 
 	def feed
-	# This is preliminary. See "Following users" for the full implementation.
-		Micropost.where("user_id = ?", id)
+		#selects all microposts that have a micropost user id = user id
+		Micropost.from_users_followed_by(self)
 	end
 
 	def following?(other_user)
