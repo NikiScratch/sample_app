@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-	before_filter :signed_in_user, only: [:index, :edit, :update, :destroy]
+	before_filter :signed_in_user, only: [:index, :edit, :update, :destroy, :following, :followers]
 	before_filter :correct_user, only: [:edit, :update]
 	before_filter :admin_user, only: :destroy
 
@@ -31,23 +31,38 @@ class UsersController < ApplicationController
 	def edit
 	end
 
-	def destroy
-		User.find(params[:id]).destroy
-		flash[:success] = "User destroyed"
-		redirect_to users_path
-	end
-
 	def update
-		#@user = User.find(params[:id])
+		@user = User.find(params[:id])
 		if @user.update_attributes(params[:user])
 			# Handle a successful update.
-			sign_in @user
 			flash[:success]="Profile Updated"
+			sign_in @user
 			redirect_to @user
 		else
 			render 'edit'
 		end
 	end
+
+	def destroy
+		User.find(params[:id]).destroy
+		flash[:success] = "User destroyed"
+		redirect_to users_url
+	end
+
+	 def following
+	    @title = "Following"
+	    @user = User.find(params[:id])
+	    @users = @user.followed_users.paginate(page: params[:page])
+	    render 'show_follow'
+	 end
+
+	 def followers
+	    @title = "Followers"
+	    @user = User.find(params[:id])
+	    @users = @user.followers.paginate(page: params[:page])
+	    render 'show_follow'
+	 end
+	
 
 
 private
@@ -64,8 +79,8 @@ private
 	end
 
 	def admin_user
-		redirect_to root_path unless current_user.admin?
+		redirect_to root_url unless current_user.admin?
 	end
 
 end
-end
+end	

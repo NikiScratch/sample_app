@@ -6,6 +6,7 @@ describe Relationship do
     let(:followed) { FactoryGirl.create(:user) }
     let(:relationship) { follower.relationships.build(followed_id: followed.id) }
 
+
     subject { relationship }
 
     it { should be_valid }
